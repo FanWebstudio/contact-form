@@ -9,12 +9,22 @@ function App() {
     message: ''
   })
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log('Form submitted:', formData)
-    // Here you would typically send the data to your backend
-    alert('Thank you for your message! We will get back to you soon.')
-    setFormData({ name: '', email: '', phone: '', message: '' })
+    
+    const formDataToSend = new FormData(e.target)
+    
+    try {
+      await fetch('/', {
+        method: 'POST',
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(formDataToSend).toString()
+      })
+      alert('Thank you for your message! We will get back to you soon.')
+      setFormData({ name: '', email: '', phone: '', message: '' })
+    } catch (error) {
+      alert('Oops! There was a problem submitting your form')
+    }
   }
 
   const handleChange = (e) => {
@@ -44,9 +54,14 @@ function App() {
             name="contact"
             method="POST"
             data-netlify="true"
-            netlify
+            netlify-honeypot="bot-field"
           >
             <input type="hidden" name="form-name" value="contact" />
+            <p hidden>
+              <label>
+                Don't fill this out if you're human: <input name="bot-field" />
+              </label>
+            </p>
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                 Name
