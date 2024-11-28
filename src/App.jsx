@@ -9,32 +9,9 @@ function App() {
     message: ''
   })
 
-  const encode = (data) => {
-    return Object.keys(data)
-      .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
-      .join("&");
-  }
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
-    
-    const formDataToSend = {
-      "form-name": "contact",
-      ...formData
-    }
-    
-    try {
-      await fetch("/", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: encode(formDataToSend)
-      })
-      alert('Thank you for your message! We will get back to you soon.')
-      setFormData({ name: '', email: '', phone: '', message: '' })
-    } catch (error) {
-      alert('Oops! There was a problem submitting your form')
-      console.error(error)
-    }
+    // Let the form submit naturally - Netlify will handle it
   }
 
   const handleChange = (e) => {
@@ -60,18 +37,13 @@ function App() {
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form 
             className="space-y-6" 
-            onSubmit={handleSubmit}
-            name="contact"
-            method="POST"
+            name="contact" 
+            method="POST" 
             data-netlify="true"
-            netlify-honeypot="bot-field"
+            onSubmit={handleSubmit}
           >
             <input type="hidden" name="form-name" value="contact" />
-            <p hidden>
-              <label>
-                Don't fill this out if you're human: <input name="bot-field" />
-              </label>
-            </p>
+            
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                 Name
