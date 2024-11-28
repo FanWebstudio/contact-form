@@ -9,14 +9,27 @@ function App() {
     message: ''
   })
 
-  const handleSubmit = () => {
-    // Let Netlify handle the submission and redirect
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      message: ''
-    })
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    try {
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(new FormData(form)).toString()
+      });
+      // Redirect to success page
+      window.location.href = '/success';
+      // Clear the form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        message: ''
+      });
+    } catch (error) {
+      alert('Error submitting form! Please try again.');
+    }
   }
 
   const handleChange = (e) => {
@@ -46,7 +59,6 @@ function App() {
             method="POST" 
             data-netlify="true"
             data-netlify-honeypot="bot-field"
-            action="/success"
             onSubmit={handleSubmit}
           >
             <input type="hidden" name="form-name" value="contact" />
