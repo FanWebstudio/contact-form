@@ -9,21 +9,31 @@ function App() {
     message: ''
   })
 
+  const encode = (data) => {
+    return Object.keys(data)
+      .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
+      .join("&");
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     
-    const formDataToSend = new FormData(e.target)
+    const formDataToSend = {
+      "form-name": "contact",
+      ...formData
+    }
     
     try {
-      await fetch('/', {
-        method: 'POST',
+      await fetch("/", {
+        method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(formDataToSend).toString()
+        body: encode(formDataToSend)
       })
       alert('Thank you for your message! We will get back to you soon.')
       setFormData({ name: '', email: '', phone: '', message: '' })
     } catch (error) {
       alert('Oops! There was a problem submitting your form')
+      console.error(error)
     }
   }
 
