@@ -12,14 +12,17 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
+
     try {
-      await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(new FormData(form)).toString()
+      const formData = new FormData(form);
+      formData.append("form-name", "contact");
+
+      await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(formData).toString(),
       });
-      // Redirect to success page
-      window.location.href = '/success';
+
       // Clear the form
       setFormData({
         name: '',
@@ -27,10 +30,15 @@ function App() {
         phone: '',
         message: ''
       });
+
+      // Show success message
+      alert("Thank you for your submission!");
+      
     } catch (error) {
-      alert('Error submitting form! Please try again.');
+      console.error(error);
+      alert("Oops! There was an error. Please try again.");
     }
-  }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -62,11 +70,9 @@ function App() {
             onSubmit={handleSubmit}
           >
             <input type="hidden" name="form-name" value="contact" />
-            <p className="hidden">
-              <label>
-                Don't fill this out if you're human: <input name="bot-field" />
-              </label>
-            </p>
+            <div hidden>
+              <input name="bot-field" />
+            </div>
             
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">

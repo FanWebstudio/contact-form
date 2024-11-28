@@ -9,13 +9,14 @@
 </head>
 
 <body>
-  <!-- Hidden form for Netlify -->
-  <form name="contact" netlify netlify-honeypot="bot-field" hidden>
+  <!-- A little help for the Netlify post-processing bots -->
+  <form name="contact" netlify netlify-honeypot="bot-field" action="/" hidden>
     <input type="text" name="name" />
     <input type="email" name="email" />
     <input type="tel" name="phone" />
     <textarea name="message"></textarea>
     <input name="bot-field" />
+    <input type="hidden" name="form-name" value="contact" />
   </form>
 
   <div id="root"></div>
