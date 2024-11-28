@@ -9,9 +9,14 @@ function App() {
     message: ''
   })
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    // Let the form submit naturally - Netlify will handle it
+  const handleSubmit = () => {
+    // Let Netlify handle the submission and redirect
+    setFormData({
+      name: '',
+      email: '',
+      phone: '',
+      message: ''
+    })
   }
 
   const handleChange = (e) => {
@@ -40,9 +45,16 @@ function App() {
             name="contact" 
             method="POST" 
             data-netlify="true"
+            data-netlify-honeypot="bot-field"
+            action="/success"
             onSubmit={handleSubmit}
           >
             <input type="hidden" name="form-name" value="contact" />
+            <p className="hidden">
+              <label>
+                Don't fill this out if you're human: <input name="bot-field" />
+              </label>
+            </p>
             
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">
